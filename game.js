@@ -13,35 +13,52 @@ const totalAssets = 5; // 调整为实际的资源数量
 function assetLoaded() {
     loadedAssets++;
     console.log(`Loaded ${loadedAssets}/${totalAssets} assets`);
+    // 添加这行来显示具体加载了什么资源
+    document.getElementById('loadingScreen').innerHTML = `<div style="text-align: center;">
+        <div>游戏加载中... (${loadedAssets}/${totalAssets})</div>
+        <div style="font-size: 12px; margin-top: 10px;">首次加载可能需要一点时间</div>
+    </div>`;
+    
     if (loadedAssets >= totalAssets) {
         assetsLoaded = true;
+        console.log('All assets loaded!'); // 添加这行
         document.getElementById('loadingScreen').style.display = 'none';
         initGame();
     }
+}
+
+// 添加错误处理
+function handleLoadError(e) {
+    console.error('Failed to load resource:', e.target.src);
+    alert('资源加载失败: ' + e.target.src);
 }
 
 // 初始化资源
 const images = {};
 const sounds = {};
 
-// 加载图片
+// 修改资源加载，添加错误处理
 images.player = new Image();
 images.player.onload = assetLoaded;
-images.player.src = 'images/player.png';
+images.player.onerror = handleLoadError;
+images.player.src = './images/player.png';
 
 images.enemy = new Image();
 images.enemy.onload = assetLoaded;
-images.enemy.src = 'images/enemy.png';
+images.enemy.onerror = handleLoadError;
+images.enemy.src = './images/enemy.png';
 
-// 加载音频
-sounds.laser = new Audio('sounds/laser.mp3');
+sounds.laser = new Audio('./sounds/laser.mp3');
 sounds.laser.oncanplaythrough = assetLoaded;
+sounds.laser.onerror = handleLoadError;
 
-sounds.explosion = new Audio('sounds/explosion.mp3');
+sounds.explosion = new Audio('./sounds/explosion.mp3');
 sounds.explosion.oncanplaythrough = assetLoaded;
+sounds.explosion.onerror = handleLoadError;
 
-sounds.background = new Audio('sounds/background.mp3');
+sounds.background = new Audio('./sounds/background.mp3');
 sounds.background.oncanplaythrough = assetLoaded;
+sounds.background.onerror = handleLoadError;
 
 // 游戏说明控制
 let gameStarted = false;
