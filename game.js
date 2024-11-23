@@ -1,3 +1,22 @@
+// 游戏说明控制
+let gameStarted = false;
+
+function showInstructions() {
+    document.getElementById('gameInstructions').style.display = 'block';
+    if (sounds.background) {
+        sounds.background.pause();
+    }
+}
+
+function hideInstructions() {
+    document.getElementById('gameInstructions').style.display = 'none';
+    gameStarted = true;
+    if (sounds.background) {
+        sounds.background.play().catch(e => console.log("音乐播放失败"));
+    }
+}
+
+// 原有代码开始
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -475,6 +494,12 @@ function resetGame() {
 
 // 游戏主循环
 function gameLoop() {
+    // 添加这个新的判断
+    if (!gameStarted && !isGameOver) {
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+
     if (isGameOver) {
         ctx.fillStyle = 'rgba(0, 0, 20, 0.8)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -493,29 +518,33 @@ function gameLoop() {
     
     // 更新玩家位置
     updatePlayerPosition();
-    
+
+    // 绘制玩家
     try {
         ctx.drawImage(images.player, player.x, player.y, player.width, player.height);
     } catch(e) {
         ctx.fillStyle = 'white';
         ctx.fillRect(player.x, player.y, player.width, player.height);
     }
-    
-    if (isShooting && canShoot) {
-        shoot();
-    }
-    
-    updateLasers();
-    updateEnemies();
-    checkCollisions();
-    checkPlayerEnemyCollision();
-    
-    // 更新和绘制爆炸效果
-    for (let i = explosions.length - 1; i >= 0; i--) {
-        if (!explosions[i].update()) {
-            explosions.splice(i, 1);
-        } else {
-            explosions[i].draw(ctx);
+
+    // 只在游戏开始后执行这些操作
+    if (gameStarted) {
+        if (isShooting && canShoot) {
+            shoot();
+        }
+        
+        updateLasers();
+        updateEnemies();
+        checkCollisions();
+        checkPlayerEnemyCollision();
+        
+        // 更新和绘制爆炸效果
+        for (let i = explosions.length - 1; i >= 0; i--) {
+            if (!explosions[i].update()) {
+                explosions.splice(i, 1);
+            } else {
+                explosions[i].draw(ctx);
+            }
         }
     }
     
@@ -580,9 +609,22 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-// 初始化
-setFullscreen();
+// 初始化游戏
+function initGame() {
+    setFullscreen();
+    updateLifeDisplay();
+    showInstructions(); // 显示初始游戏说明
+    initNebula(300);
+    gameLoop();
+    
+    sounds.background.loop = true;
+    sounds.background.volume = 0.5;
+}
+
+// 启动游戏
+window.addEventListener('load', () => {
+    initGame();
+});
+
+// 窗口大小调整
 window.addEventListener('resize', setFullscreen);
-updateLifeDisplay();
-initNebula(300);
-gameLoop();
