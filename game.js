@@ -1,3 +1,10 @@
+// 添加调试信息
+console.log('Game loading...');
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    alert('Error: ' + msg);
+    return false;
+};
+
 // 游戏说明控制
 let gameStarted = false;
 
