@@ -39,6 +39,7 @@ function showInstructions() {
 }
 
 function hideInstructions() {
+    console.log("开始游戏");  // 调试信息
     document.getElementById('gameInstructions').style.display = 'none';
     gameStarted = true;
     if (sounds.background) {
@@ -46,6 +47,7 @@ function hideInstructions() {
     }
     // 设置画布大小
     setFullscreen();
+    console.log("画布大小:", canvas.width, canvas.height);  // 调试信息
     // 开始游戏循环
     requestAnimationFrame(gameLoop);
 }
@@ -353,6 +355,8 @@ function initNebula(count) {
 
 // 更新星云背景
 function updateNebula() {
+    console.log("更新星云背景");  // 添加调试信息
+    
     // 使用深色背景
     ctx.fillStyle = 'rgba(5, 5, 20, 0.2)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -383,6 +387,7 @@ function updateLifeDisplay() {
 
 // 更新玩家位置
 function updatePlayerPosition() {
+    console.log("更新玩家位置", { moveLeft, moveRight, moveUp, moveDown });  // 调试信息
     if (moveLeft && player.x > 0) {
         player.x -= player.speed;
     }
@@ -395,6 +400,7 @@ function updatePlayerPosition() {
     if (moveDown && player.y < player.maxY) {
         player.y += player.speed;
     }
+    console.log("玩家新位置:", { x: player.x, y: player.y });  // 调试信息
 }
 
 // 射击函数
@@ -545,6 +551,8 @@ function resetGame() {
 
 // 游戏主循环
 function gameLoop() {
+    console.log("游戏状态:", { gameStarted, isGameOver });  // 添加调试信息
+
     // 添加这个新的判断
     if (!gameStarted && !isGameOver) {
         requestAnimationFrame(gameLoop);
@@ -564,6 +572,9 @@ function gameLoop() {
         return;
     }
 
+    // 清除画布
+    ctx.clearRect(0, 0, canvas.width, canvas.height);  // 添加这行
+
     // 更新星云背景
     updateNebula();
     
@@ -572,8 +583,10 @@ function gameLoop() {
 
     // 绘制玩家
     try {
+        console.log("绘制玩家:", { x: player.x, y: player.y });  // 添加调试信息
         ctx.drawImage(images.player, player.x, player.y, player.width, player.height);
     } catch(e) {
+        console.error("玩家绘制失败:", e);  // 改进错误信息
         ctx.fillStyle = 'white';
         ctx.fillRect(player.x, player.y, player.width, player.height);
     }
