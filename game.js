@@ -13,10 +13,14 @@ images.player.src = './images/player.png';
 images.enemy = new Image();
 images.enemy.src = './images/enemy.png';
 
+images.explosion = new Image();  // 新添加
+images.explosion.src = './images/explosion.png';  // 新添加
+
 // 4. 加载音频
 sounds.laser = new Audio('./sounds/laser.mp3');
 sounds.explosion = new Audio('./sounds/explosion.mp3');
 sounds.background = new Audio('./sounds/background.mp3');
+sounds.shoot = new Audio('./sounds/shoot.mp3');  // 新添加
 
 // 5. 设置全屏函数
 function setFullscreen() {
@@ -161,13 +165,6 @@ let canShoot = true;
 let isShooting = false;
 const shootDelay = 150;
 
-// 加载图片
-const images = {
-    player: new Image(),
-    enemy: new Image(),
-    explosion: new Image()
-};
-
 // 添加图片加载事件监听
 images.player.onload = function() {
     console.log("玩家飞船图片加载成功");
@@ -179,13 +176,6 @@ images.player.onerror = function() {
 images.player.src = 'images/player.png';
 images.enemy.src = 'images/enemy.png';
 images.explosion.src = 'images/explosion.png';
-
-// 音效和背景音乐
-const sounds = {
-    shoot: new Audio('sounds/shoot.mp3'),
-    explosion: new Audio('sounds/explosion.mp3'),
-    background: new Audio('sounds/background.mp3')
-};
 
 // 设置音效音量和背景音乐循环
 sounds.background.loop = true;
