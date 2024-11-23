@@ -20,6 +20,36 @@ function hideInstructions() {
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+
+// 添加触摸控制
+canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    player.x = touch.clientX - rect.left - player.width / 2;
+    player.y = touch.clientY - rect.top - player.height / 2;
+    isShooting = true;
+}, false);
+
+canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        player.x = touch.clientX - rect.left - player.width / 2;
+        player.y = touch.clientY - rect.top - player.height / 2;
+        
+        // 确保飞船不会移出屏幕
+        player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+        player.y = Math.max(player.minY, Math.min(player.maxY, player.y));
+    }
+}, false);
+
+canvas.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    isShooting = false;
+}, false);
+
 // 设置 Canvas 全屏
 function setFullscreen() {
     canvas.width = window.innerWidth;
