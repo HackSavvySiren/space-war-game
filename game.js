@@ -1,20 +1,30 @@
-// 初始化资源
+// 1. 首先初始化画布（这部分要放在最前面）
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// 2. 初始化资源
 const images = {};
 const sounds = {};
 
-// 加载图片
+// 3. 加载图片
 images.player = new Image();
 images.player.src = './images/player.png';
 
 images.enemy = new Image();
 images.enemy.src = './images/enemy.png';
 
-// 加载音频
+// 4. 加载音频
 sounds.laser = new Audio('./sounds/laser.mp3');
 sounds.explosion = new Audio('./sounds/explosion.mp3');
 sounds.background = new Audio('./sounds/background.mp3');
 
-// 游戏说明控制
+// 5. 设置全屏函数
+function setFullscreen() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+// 6. 游戏说明控制
 let gameStarted = false;
 
 function showInstructions() {
@@ -30,12 +40,17 @@ function hideInstructions() {
     if (sounds.background) {
         sounds.background.play().catch(e => console.log("音乐播放失败"));
     }
+    // 设置画布大小
+    setFullscreen();
+    // 开始游戏循环
+    requestAnimationFrame(gameLoop);
 }
 
-// 原有代码开始
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+// 7. 添加窗口大小改变监听
+window.addEventListener('resize', setFullscreen);
 
+// 8. 初始化画布大小
+setFullscreen();
 
 // 添加触摸控制
 canvas.addEventListener('touchstart', function(e) {
