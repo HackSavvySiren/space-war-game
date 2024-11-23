@@ -93,6 +93,15 @@
     </style>
 </head>
 <body>
+     <!-- 添加这个加载提示 -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; color: white; display: flex; justify-content: center; align-items: center; z-index: 2000;">
+        <div style="text-align: center;">
+            <div>游戏加载中...</div>
+            <div style="font-size: 12px; margin-top: 10px;">首次加载可能需要一点时间</div>
+        </div>
+    </div>
+
+    <!-- 原有的代码从这里开始 -->
     <div id="score">分数: 0</div>
     
     <div id="gameInstructions">

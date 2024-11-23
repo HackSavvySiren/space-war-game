@@ -5,6 +5,44 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     return false;
 };
 
+// 添加加载状态管理
+let assetsLoaded = false;
+let loadedAssets = 0;
+const totalAssets = 5; // 调整为实际的资源数量
+
+function assetLoaded() {
+    loadedAssets++;
+    console.log(`Loaded ${loadedAssets}/${totalAssets} assets`);
+    if (loadedAssets >= totalAssets) {
+        assetsLoaded = true;
+        document.getElementById('loadingScreen').style.display = 'none';
+        initGame();
+    }
+}
+
+// 初始化资源
+const images = {};
+const sounds = {};
+
+// 加载图片
+images.player = new Image();
+images.player.onload = assetLoaded;
+images.player.src = 'images/player.png';
+
+images.enemy = new Image();
+images.enemy.onload = assetLoaded;
+images.enemy.src = 'images/enemy.png';
+
+// 加载音频
+sounds.laser = new Audio('sounds/laser.mp3');
+sounds.laser.oncanplaythrough = assetLoaded;
+
+sounds.explosion = new Audio('sounds/explosion.mp3');
+sounds.explosion.oncanplaythrough = assetLoaded;
+
+sounds.background = new Audio('sounds/background.mp3');
+sounds.background.oncanplaythrough = assetLoaded;
+
 // 游戏说明控制
 let gameStarted = false;
 
